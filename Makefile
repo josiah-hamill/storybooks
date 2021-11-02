@@ -11,32 +11,37 @@ create-tf-backend-bucket:
 
 ###
 
+check-env:
+ifndef ENV
+	$(error Please set ENV=[staging|prod])
+endif
+
 define get-secret
 $(shell gcloud secrets versions access latest --secret=$(1) --project=$(PROJECT_ID))
 endef
 
 ###
 
-ENV=staging
-
-terraform-create-workspace:
+terraform-create-workspace: check-env
 	cd terraform && \
 		terraform workspace new $(ENV)
 
-terraform-init:
+terraform-init: check-env
 	cd terraform && \
 		terraform workspace select $(ENV) && \
 		terraform init
 
 TF_ACTION?=plan
 
-terraform-action:
+terraform-action: check-env
 	cd terraform && \
 		terraform workspace select $(ENV) && \
 		terraform $(TF_ACTION) \
 		-var-file="./environments/common.tfvars" \
 		-var-file="./environments/$(ENV)/config.tfvars" \
-		-var="atlas_private_key=$(call get-secret,atlas_private_key)" \
+		-var="atlas_project_id=$(call get-secret,atlas_project_id_$(ENV))" \
+		-var="atlas_public_key=$(call get-secret,atlas_public_key_$(ENV))" \
+		-var="atlas_private_key=$(call get-secret,atlas_private_key_$(ENV))" \
 		-var="atlas_user_password=$(call get-secret,atlas_user_password_$(ENV))" \
 		-var="cloudflare_api_token=$(call get-secret,cloudflare_api_token)"
 
@@ -51,12 +56,12 @@ CONTAINER_NAME=storybooks-api
 DB_NAME=storybooks-$(ENV)
 MONGO_URI="MONGO_URI=mongodb+srv://storybooks-user-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@storybooks-$(ENV).fwawq.mongodb.net/$(DB_NAME)?retryWrites=true&w=majority"
 
-ssh:
+ssh: check-env
 	gcloud compute ssh $(SSH_STRING) \
 		--project=$(PROJECT_ID) \
 		--zone=$(ZONE)
 
-ssh-cmd:
+ssh-cmd: check-env
 	@gcloud compute ssh $(SSH_STRING) \
 		--project=$(PROJECT_ID) \
 		--zone=$(ZONE) \
@@ -69,7 +74,7 @@ push:
 	docker tag $(LOCAL_TAG) $(REMOTE_TAG)
 	docker push $(REMOTE_TAG)
 
-deploy:
+deploy: check-env
 	$(MAKE) ssh-cmd CMD='docker-credential-gcr configure-docker'
 	@echo "pulling new container image..."
 	$(MAKE) ssh-cmd CMD='docker pull $(REMOTE_TAG)'
