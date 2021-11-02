@@ -87,7 +87,7 @@ deploy: check-env
 			--restart=unless-stopped \
 			-p 80:3000 \
 			-e PORT=3000 \
-			-e \"MONGO_URI=mongodb+srv://storybooks-user-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@storybooks-$(ENV).fwawq.mongodb.net/$(DB_NAME)?retryWrites=true\" \
+			-e \"MONGO_URI=mongodb+srv://storybooks-user-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@storybooks-$(ENV).$(call get-secret,atlas_tenant_id_$(ENV)).mongodb.net/$(DB_NAME)?retryWrites=true\" \
 			-e GOOGLE_CLIENT_ID=125795542332-du5sq2a8ke7jlo7ci3v094e5832nooq7.apps.googleusercontent.com \
 			-e GOOGLE_CLIENT_SECRET=$(call get-secret,google_oauth_client_secret) \
 			$(REMOTE_TAG) \
