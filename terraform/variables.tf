@@ -4,15 +4,19 @@ variable "app_name" {
 }
 
 ### ATLAS
-variable "atlas_project_id" {
+# variable "atlas_project_id" {
+#   type = string
+# }
+
+variable "atlas_strategix_owner_id" {
   type = string
 }
 
-variable "atlas_public_key" {
+variable "atlas_strategix_public_key" {
   type = string
 }
 
-variable "atlas_private_key" {
+variable "atlas_strategix_private_key" {
   type = string
 }
 

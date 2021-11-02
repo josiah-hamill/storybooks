@@ -39,9 +39,9 @@ terraform-action: check-env
 		terraform $(TF_ACTION) \
 		-var-file="./environments/common.tfvars" \
 		-var-file="./environments/$(ENV)/config.tfvars" \
-		-var="atlas_project_id=$(call get-secret,atlas_project_id_$(ENV))" \
-		-var="atlas_public_key=$(call get-secret,atlas_public_key_$(ENV))" \
-		-var="atlas_private_key=$(call get-secret,atlas_private_key_$(ENV))" \
+		-var="atlas_strategix_owner_id=$(call get-secret,atlas_strategix_owner_id)" \
+		-var="atlas_strategix_public_key=$(call get-secret,atlas_strategix_public_key)" \
+		-var="atlas_strategix_private_key=$(call get-secret,atlas_strategix_private_key)" \
 		-var="atlas_user_password=$(call get-secret,atlas_user_password_$(ENV))" \
 		-var="cloudflare_api_token=$(call get-secret,cloudflare_api_token)"
 
