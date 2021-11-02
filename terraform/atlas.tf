@@ -24,7 +24,7 @@ resource "mongodbatlas_database_user" "mongo_user" {
 
   roles {
     role_name     = "readWrite"
-    database_name = "storybooks"
+    database_name = "storybooks-${terraform.workspace}"
   }
 }
 
