@@ -54,7 +54,7 @@ LOCAL_TAG=storybooks-app:$(GITHUB_SHA)
 REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
 CONTAINER_NAME=storybooks-api
 DB_NAME=storybooks-$(ENV)
-MONGO_URI="MONGO_URI=mongodb+srv://storybooks-user-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@storybooks-$(ENV).fwawq.mongodb.net/$(DB_NAME)?retryWrites=true&w=majority"
+MONGO_URI="MONGO_URI=mongodb+srv://storybooks-user-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@storybooks-$(ENV).$(call get-secret,atlas_tenant_id_$(ENV)).mongodb.net/$(DB_NAME)?retryWrites=true&w=majority"
 
 ssh: check-env
 	gcloud compute ssh $(SSH_STRING) \
