@@ -51,9 +51,7 @@ SSH_STRING = vaxroute@storybooks-vm-$(ENV)
 
 GITHUB_SHA?=latest
 LOCAL_TAG=storybooks-app:$(GITHUB_SHA)
-LOCAL_PULL_TAG=storybooks-app@sha256:$(GITHUB_SHA)
 REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
-REMOTE_PULL_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_PULL_TAG)
 CONTAINER_NAME=storybooks-api
 DB_NAME=storybooks-$(ENV)
 
@@ -78,7 +76,7 @@ push:
 deploy: check-env
 	$(MAKE) ssh-cmd CMD='docker-credential-gcr configure-docker'
 	@echo "pulling new container image..."
-	$(MAKE) ssh-cmd CMD='docker pull $(REMOTE_PULL_TAG)'
+	$(MAKE) ssh-cmd CMD='docker pull $(REMOTE_TAG)'
 	@echo "removing old container..."
 	-$(MAKE) ssh-cmd CMD='docker container stop $(CONTAINER_NAME)'
 	-$(MAKE) ssh-cmd CMD='docker container rm $(CONTAINER_NAME)'
