@@ -1,1 +1,1 @@
-gcp_machine_type = "e2-micro"
+gcp_machine_type = "e2-medium"
