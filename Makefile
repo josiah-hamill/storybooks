@@ -34,7 +34,7 @@ terraform-init: check-env
 TF_ACTION?=plan
 
 terraform-action: check-env
-	cd terraform && \
+	@cd terraform && \
 		terraform workspace select $(ENV) && \
 		terraform $(TF_ACTION) \
 		-var-file="./environments/common.tfvars" \
